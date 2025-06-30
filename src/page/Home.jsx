@@ -245,7 +245,7 @@ function Home() {
       {/* other information */}
       <OtherInformation/>
       <div id="preview-page" className={`w-full mt-10 border border-white/30 p-2 rounded`} >
-        <Resume isLink={"hidden"}/>
+        <Resume isHardCopy={true} isPrint={true} isLink={"hidden"}/>
       </div>
     </div>
   );

@@ -5,19 +5,28 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 
-function Resume({isLink}) {
+function Resume({isLink,isPrint,isHardCopy}) {
   const [hardCopy,setHardCopy] = useState(false)
   const mainId = useRef()
   // console.log(mainId.current)
   // ✅ Declare print handler using useReactToPrint hook
   const handlePrint = ()=>{
-    alert("When you move to print page area >>> go to >> more setting >> disable header and footer option")
-  const originalContent = document.body.innerHTML
-  const copyContent = mainId.current.innerHTML
-  document.body.innerHTML = copyContent
+    const l = document.getElementById("l")
+    const hc = document.getElementById("hc")
+    const ip = document.getElementById("ip")
+    const t = {l:l.style.display,ip:ip.style.display,hc:hc.style.display}
+    l.style.display = "none"
+    ip.style.display = "none"
+    hc.style.display = "none"
+    // alert("When you move to print page area >>> go to >> more setting >> disable header and footer option")
+  // const originalContent = document.body.innerHTML
+  // const copyContent = mainId.current.innerHTML
+  // document.body.innerHTML = copyContent
   window.print()
-  document.body.innerHTML = originalContent
-
+  // document.body.innerHTML = originalContent
+l.style.display = t.l
+    ip.style.display = t.ip
+    hc.style.display = t.hc
   }
   const {
     headerOne,
@@ -35,13 +44,14 @@ function Resume({isLink}) {
   return (
     <>
       <Link
+        id="l"
         to="/"
-        className={`absolute top-10 left-10 border border-black/40 p-2 rounded ${isLink && 'hidden'} `}
+        className={`absolute top-15 left-5 border border-black/40 p-2 rounded ${isLink && 'hidden'} `}
       >
         <FaRegEdit />
       </Link>
-      <button className="border text-blue-400 border-blue-400 m-2 hover:bg-blue-400 hover:text-white/90 transition-all ease-in-out duration-200 rounded p-2" onClick={()=>setHardCopy(!hardCopy)} >HardCopy</button>
-      <button className="border text-blue-400 border-blue-400 m-2 hover:bg-blue-400 hover:text-white/90 transition-all ease-in-out duration-200 rounded p-2" 
+      <button id="hc" className={`border text-blue-400 border-blue-400 m-2 hover:bg-blue-400 hover:text-white/90 transition-all ease-in-out duration-200 rounded p-2 ${isHardCopy ? "hidden" :""}`} onClick={()=>setHardCopy(!hardCopy)} >HardCopy</button>
+      <button id="ip" className={`border text-blue-400 border-blue-400 m-2 hover:bg-blue-400 hover:text-white/90 transition-all ease-in-out duration-200 rounded p-2 ${isPrint ? "hidden" :""} `} 
       onClick={handlePrint} 
       >Print</button>
       <div ref={mainId} className="max-w-4xl mx-auto p-12 text-gray-900 font-sans space-y-6 bg-white">
