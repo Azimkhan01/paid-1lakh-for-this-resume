@@ -4,7 +4,6 @@ import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
-import  html2pdf  from "html2pdf.js";
 
 function Resume({isLink}) {
   const [hardCopy,setHardCopy] = useState(false)
@@ -12,19 +11,13 @@ function Resume({isLink}) {
   // console.log(mainId.current)
   // ✅ Declare print handler using useReactToPrint hook
   const handlePrint = ()=>{
-   if (!mainId.current) return;
+    alert("When you move to print page area >>> go to >> more setting >> disable header and footer option")
+  const originalContent = document.body.innerHTML
+  const copyContent = mainId.current.innerHTML
+  document.body.innerHTML = copyContent
+  window.print()
+  document.body.innerHTML = originalContent
 
-  setTimeout(() => {
-    const opt = {
-      margin: 0.3,
-      filename: "My_Resume.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    };
-
-    html2pdf().set(opt).from(mainId.current).save();
-  }, 100); // delay 
   }
   const {
     headerOne,
