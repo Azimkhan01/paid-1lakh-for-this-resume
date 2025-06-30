@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
+import  html2pdf  from "html2pdf.js";
 
 function Resume({isLink}) {
   const [hardCopy,setHardCopy] = useState(false)
