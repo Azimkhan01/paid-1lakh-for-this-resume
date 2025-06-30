@@ -9,6 +9,12 @@ const FormSlice = createSlice({
       number: "",
       address: "",
     },
+    social:{
+      linkedin:'',
+      github:'',
+      portfolio:"",
+      leetcode:''
+    },
     summary: "",
     workExperience: [],
     skill: [],
@@ -48,6 +54,10 @@ const FormSlice = createSlice({
     },
     setOtherCertificationStateAll:(s,a)=>{
         return {...s,otherInfomation:a.payload}
+    },
+    setSocialStateAll:(s,a)=>{
+      // console.log(a.payload)
+      return {...s,social:a.payload}
     }
   },
 });
@@ -62,6 +72,7 @@ export const {
   setCourseStateAll,
   setEducationStateAll,
   setCertificationStateAll,
-  setOtherCertificationStateAll
+  setOtherCertificationStateAll,
+  setSocialStateAll
 } = FormSlice.actions;
 export default FormSlice.reducer;

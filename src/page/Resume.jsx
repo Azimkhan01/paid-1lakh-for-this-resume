@@ -1,13 +1,33 @@
 
 
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 
 function Resume({isLink}) {
+  const [hardCopy,setHardCopy] = useState(false)
+  const mainId = useRef()
+  // console.log(mainId.current)
+  // ✅ Declare print handler using useReactToPrint hook
+  const handlePrint = ()=>{
+   if (!mainId.current) return;
+
+  setTimeout(() => {
+    const opt = {
+      margin: 0.3,
+      filename: "My_Resume.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
+
+    html2pdf().set(opt).from(mainId.current).save();
+  }, 100); // delay 
+  }
   const {
     headerOne,
+    social,
     summary,
     workExperience,
     skill,
@@ -17,7 +37,7 @@ function Resume({isLink}) {
     certification,
     otherInfomation,
   } = useSelector((state) => state.FormSlice);
-
+  // console.log(social)
   return (
     <>
       <Link
@@ -26,8 +46,11 @@ function Resume({isLink}) {
       >
         <FaRegEdit />
       </Link>
-
-      <div className="max-w-4xl mx-auto p-6 text-gray-900 font-sans space-y-6 bg-white overflow-auto">
+      <button className="border text-blue-400 border-blue-400 m-2 hover:bg-blue-400 hover:text-white/90 transition-all ease-in-out duration-200 rounded p-2" onClick={()=>setHardCopy(!hardCopy)} >HardCopy</button>
+      <button className="border text-blue-400 border-blue-400 m-2 hover:bg-blue-400 hover:text-white/90 transition-all ease-in-out duration-200 rounded p-2" 
+      onClick={handlePrint} 
+      >Print</button>
+      <div ref={mainId} className="max-w-4xl mx-auto p-12 text-gray-900 font-sans space-y-6 bg-white">
         {/* Header */}
         <header className="text-center space-y-1">
           <h1 className="text-3xl font-bold">{headerOne?.name}</h1>
@@ -35,17 +58,17 @@ function Resume({isLink}) {
             +91 {headerOne?.number} |{" "}
             <a
               href={`mailto:${headerOne?.email}`}
-              className="text-blue-600 underline"
+              className="text-blue-600 underline decoration-white"
             >
               {headerOne?.email}
             </a>{" "}
             | {headerOne?.address}
           </p>
-          {project?.[0]?.links && (
+          { social && !hardCopy && (
             <p>
-              {project[0].links.linkedin && <>LinkedIn - {project[0].links.linkedin} | </>}
-              {project[0].links.github && <>GitHub - {project[0].links.github} | </>}
-              {project[0].links.portfolio && <>Portfolio - {project[0].links.portfolio}</>}
+              {social.linkedin && <a href={social.linkedin} className="decoration-white text-blue-400" target="_blank">LinkedIn |</a>}
+              {social.github && <><a href={social.github} className="decoration-white text-blue-400" target="_blank"> GitHub |</a> </>}
+              {social.portfolio && <><a href={social.portfolio} className="decoration-white text-blue-400" target="_blank">Portfolio</a> </>}
             </p>
           )}
         </header>

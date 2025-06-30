@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { CiSaveDown1 } from "react-icons/ci";
 import { IoAddSharp } from "react-icons/io5";
 import { BsDash } from "react-icons/bs";
-import { setCertificationStateAll, setCourseStateAll, setEducationStateAll, setHeaderOne, setOtherCertificationStateAll, setProjectStateAll, setSkillStateAll, setSummaryState, setWorkExperienceStateAll } from "../redux/Form/FormSlice";
+import { setCertificationStateAll, setCourseStateAll, setEducationStateAll, setHeaderOne, setOtherCertificationStateAll, setProjectStateAll, setSkillStateAll, setSocialStateAll, setSummaryState, setWorkExperienceStateAll } from "../redux/Form/FormSlice";
 import Resume from "./Resume";
 import { toast } from "react-toastify";
 
@@ -63,13 +63,14 @@ function Home() {
   const removeWorkExp = () => {
     setWorkExp((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev));
   };
-  const [preview,setpreview] = useState(false)
-  const handleMouseEnter = ()=>{setpreview(!preview)}
+  // const [preview,setpreview] = useState(false)
+  const handleMouseEnter = ()=>{
+    const element = document.getElementById("preview-page")
+    element.scrollIntoView({behavior:'smooth'})
+  }
   return (
     <div className="min-h-screen w-full bg-black/90 p-4 text-white">
-      <div className={`absolute top-0 right-0 ${preview ? "block" : "hidden"}`} >
-        <Resume isLink={"hidden"}/>
-      </div>
+      
       <Link
         className="absolute border border-white/30 p-2 rounded bg-black/70"
         to={"/resume"}
@@ -106,7 +107,7 @@ function Home() {
           <CiSaveDown1 className="text-3xl" />
         </button>
       </div>
-
+        <Social/>
       {/* Summary Section */}
       <div className="flex flex-col gap-3 mt-6">
         <h1 className="text-2xl font-semibold">Summary</h1>
@@ -243,6 +244,9 @@ function Home() {
       <Certifications/>
       {/* other information */}
       <OtherInformation/>
+      <div id="preview-page" className={`w-full mt-10 border border-white/30 p-2 rounded`} >
+        <Resume isLink={"hidden"}/>
+      </div>
     </div>
   );
 }
@@ -1000,3 +1004,30 @@ const OtherInformation = () => {
     </div>
   );
 };
+
+const Social = ()=>{
+  const dispatch = useDispatch()
+  const [social,setSocial] = useState({
+    linkedin:'',
+    github:'',
+    leetcode:'',
+    portfolio:''
+  })
+  
+  const handleSocialLink = ()=>{
+      console.log("Clicked")
+    dispatch(setSocialStateAll(social))
+  }
+
+  return <div className="w-full flex flex-col gap-2" >
+    {
+      Object.keys(social).map((v,i)=>{
+        // console.log(v)
+          return <input value={social[v]} onChange={(e)=>{setSocial({...social,[v]:e.target.value})}} className="border border-white/30 w-full p-2 placeholder:text-white/60 placeholder:capitalize" key={i} type="text" placeholder={v} />
+      })
+    }
+    <button className="self-center p-2 border border-white/30 rounded m-2" onClick={()=>handleSocialLink()}>
+          <CiSaveDown1 className="text-3xl" />
+        </button>
+  </div>
+}
