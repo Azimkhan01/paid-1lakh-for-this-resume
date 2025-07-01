@@ -176,7 +176,7 @@ function Resume({ isLink, isPrint, isHardCopy }) {
                 <h3 className="font-semibold">
                   {proj.title} | {proj.tech}
                 </h3>
-                <ul className="list-disc list-inside">
+                <ul className="list-disc list-outside">
                   {proj.points?.map((pt, i) => (
                     <li key={i}>{pt}</li>
                   ))}
@@ -230,9 +230,11 @@ function Resume({ isLink, isPrint, isHardCopy }) {
                     <p>
                       <strong>{c.name}</strong> — {c.startDate} – {c.endDate}
                     </p>
-                    <ul className="list-disc list-inside ml-4">
+                    <ul className="list-disc list-outside pl-6">
                       {c.coursework.map((cw, j) => (
-                        <li className={`${c?.coursework <= 0 ? "hidden" : ""}`} key={j}>{cw}</li>
+                        <li className="text-justify" key={j}>
+                          {cw}
+                        </li>
                       ))}
                     </ul>
                   </div>
