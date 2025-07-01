@@ -12,13 +12,13 @@ function Resume({ isLink, isPrint, isHardCopy }) {
     const l = document.getElementById("l");
     const hc = document.getElementById("hc");
     const ip = document.getElementById("ip");
-    l.classList.add("hidden") 
-    hc.classList.add("hidden") 
-    ip.classList.add("hidden") 
-     window.print();
-     l.classList.remove("hidden") 
-     hc.classList.remove("hidden") 
-     ip.classList.remove("hidden")
+    l.classList.add("hidden");
+    hc.classList.add("hidden");
+    ip.classList.add("hidden");
+    window.print();
+    l.classList.remove("hidden");
+    hc.classList.remove("hidden");
+    ip.classList.remove("hidden");
   };
   const {
     headerOne,
@@ -218,25 +218,26 @@ function Resume({ isLink, isPrint, isHardCopy }) {
         )}
 
         {/* Courses */}
-        {course?.length > 0 && (
+        {course?.some((c) => c.coursework?.length > 0) && (
           <section>
             <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">
               COURSES
             </h2>
-            {course.map((c, i) => (
-              <div key={i} className="mb-2">
-                <p>
-                  <strong>{c.name}</strong> — {c.startDate} – {c.endDate}
-                </p>
-                {c.coursework?.length > 0 && (
-                  <ul className="list-disc list-inside ml-4">
-                    {c.coursework.map((cw, j) => (
-                      <li key={j}>{cw}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+            {course.map(
+              (c, i) =>
+                c.coursework?.length > 0 && (
+                  <div key={i} className="mb-2">
+                    <p>
+                      <strong>{c.name}</strong> — {c.startDate} – {c.endDate}
+                    </p>
+                    <ul className="list-disc list-inside ml-4">
+                      {c.coursework.map((cw, j) => (
+                        <li className={`${c?.coursework <= 0 ? "hidden" : ""}`} key={j}>{cw}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+            )}
           </section>
         )}
 
