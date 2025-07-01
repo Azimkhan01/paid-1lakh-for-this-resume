@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import ResumeFormat from './page/ResumeFormat'
 
 function App() {
+  console.log({owner:"Azimuddeen Khan",portfolio:"https://everazim.vercel.app/",contact:'7678084267'})
   return (
     <BrowserRouter>
     <ToastContainer/>

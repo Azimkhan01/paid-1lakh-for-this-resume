@@ -4,13 +4,29 @@ import { Link } from "react-router-dom";
 import { CiSaveDown1 } from "react-icons/ci";
 import { IoAddSharp } from "react-icons/io5";
 import { BsDash } from "react-icons/bs";
-import { setCertificationStateAll, setCourseStateAll, setEducationStateAll, setHeaderOne, setOtherCertificationStateAll, setProjectStateAll, setSkillStateAll, setSocialStateAll, setSummaryState, setWorkExperienceStateAll } from "../redux/Form/FormSlice";
+import {
+  setCertificationStateAll,
+  setCourseStateAll,
+  setEducationStateAll,
+  setHeaderOne,
+  setOtherCertificationStateAll,
+  setProjectStateAll,
+  setSkillStateAll,
+  setSocialStateAll,
+  setSummaryState,
+  setWorkExperienceStateAll,
+} from "../redux/Form/FormSlice";
 import Resume from "./Resume";
 import { toast } from "react-toastify";
 
 function Home() {
+  useEffect(()=>{
+    toast("Developer : Azimuddeen khan").then(()=>{
+      toast("inspect for console to see developer details.")
+    })
+  })
   const headerOneState = useSelector((state) => state.FormSlice);
-  console.log(headerOneState)
+  // console.log(headerOneState)
   const dispatch = useDispatch();
 
   const [headerOne, setHeaderOneLocal] = useState({
@@ -32,20 +48,19 @@ function Home() {
   const c = ["name", "email", "address", "number"];
 
   const handleHeaderOne = () => {
-    toast("the headers are added")
+    toast("the headers are added");
     dispatch(setHeaderOne(headerOne));
   };
 
   const handleSummary = () => {
-    toast("the summary are added")
+    toast("the summary are added");
     dispatch(setSummaryState(summary));
   };
 
-  const handleWorkExperienceSave = ()=>{
-    toast("the work experience is added")
-    dispatch(setWorkExperienceStateAll(workExp))
-  }
-
+  const handleWorkExperienceSave = () => {
+    toast("the work experience is added");
+    dispatch(setWorkExperienceStateAll(workExp));
+  };
 
   const addWorkExp = () => {
     setWorkExp((prev) => [
@@ -64,13 +79,12 @@ function Home() {
     setWorkExp((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev));
   };
   // const [preview,setpreview] = useState(false)
-  const handleMouseEnter = ()=>{
-    const element = document.getElementById("preview-page")
-    element.scrollIntoView({behavior:'smooth'})
-  }
+  const handleMouseEnter = () => {
+    const element = document.getElementById("preview-page");
+    element.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <div className="min-h-screen w-full bg-black/90 p-4 text-white">
-      
       <Link
         className="absolute border border-white/30 p-2 rounded bg-black/70"
         to={"/resume"}
@@ -83,7 +97,14 @@ function Home() {
       >
         Resume Format
       </Link>
-      <button className="absolute top-10 right-10 bg-black border border-white/30 rounded p-2" onClick={()=>{handleMouseEnter()}}  >Preview</button>
+      <button
+        className="absolute top-10 right-10 bg-black border border-white/30 rounded p-2"
+        onClick={() => {
+          handleMouseEnter();
+        }}
+      >
+        Preview
+      </button>
 
       {/* Header Inputs */}
       <div className="w-full flex flex-col py-2 gap-2 mt-10">
@@ -107,7 +128,7 @@ function Home() {
           <CiSaveDown1 className="text-3xl" />
         </button>
       </div>
-        <Social/>
+      <Social />
       {/* Summary Section */}
       <div className="flex flex-col gap-3 mt-6">
         <h1 className="text-2xl font-semibold">Summary</h1>
@@ -127,10 +148,16 @@ function Home() {
       <div className="flex flex-col gap-4 mt-6">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-semibold">Work Experience</h1>
-          <button className="p-2 rounded border border-white/30" onClick={addWorkExp}>
+          <button
+            className="p-2 rounded border border-white/30"
+            onClick={addWorkExp}
+          >
             <IoAddSharp />
           </button>
-          <button className="p-2 rounded border border-white/30" onClick={removeWorkExp}>
+          <button
+            className="p-2 rounded border border-white/30"
+            onClick={removeWorkExp}
+          >
             <BsDash />
           </button>
         </div>
@@ -233,31 +260,30 @@ function Home() {
         </button>
       </div>
       {/* skill component */}
-      <Skill/>
+      <Skill />
       {/* Projects component */}
-      <Project/>
+      <Project />
       {/* courses */}
-      <Courses/>
+      <Courses />
       {/* education */}
-      <Education/>
+      <Education />
       {/* certification */}
-      <Certifications/>
+      <Certifications />
       {/* other information */}
-      <OtherInformation/>
-      <div id="preview-page" className={`w-full mt-10 border border-white/30 p-2 rounded`} >
-        <Resume isHardCopy={true} isPrint={true} isLink={"hidden"}/>
+      <OtherInformation />
+      <div
+        id="preview-page"
+        className={`w-full mt-10 border border-white/30 p-2 rounded`}
+      >
+        <Resume isHardCopy={true} isPrint={true} isLink={"hidden"} />
       </div>
     </div>
   );
 }
 
-export default Home;
-
 const Skill = () => {
-  const dispatch = useDispatch()
-  const [skills, setSkills] = useState([
-    { name: "", skills: [""] }
-  ]);
+  const dispatch = useDispatch();
+  const [skills, setSkills] = useState([{ name: "", skills: [""] }]);
 
   // Add new skill category
   const handleAddCategory = () => {
@@ -266,8 +292,7 @@ const Skill = () => {
 
   // Remove last skill category
   const handleRemoveCategory = () => {
-    if (skills.length > 1)
-      setSkills(skills.slice(0, -1));
+    if (skills.length > 1) setSkills(skills.slice(0, -1));
   };
 
   // Update category name
@@ -300,21 +325,27 @@ const Skill = () => {
     }
   };
 
-  console.log(skills)
+  // console.log(skills)
 
-  const handleSkillSave = ()=>{
-    toast("the skill is added")
-    dispatch(setSkillStateAll(skills))
-  }
+  const handleSkillSave = () => {
+    toast("the skill is added");
+    dispatch(setSkillStateAll(skills));
+  };
 
   return (
     <div>
       <div className="flex items-center gap-3 p-2">
         <h1 className="text-2xl font-semibold">Skills</h1>
-        <button className="p-2 rounded border border-white/30" onClick={handleAddCategory}>
+        <button
+          className="p-2 rounded border border-white/30"
+          onClick={handleAddCategory}
+        >
           <IoAddSharp />
         </button>
-        <button className="p-2 rounded border border-white/30" onClick={handleRemoveCategory}>
+        <button
+          className="p-2 rounded border border-white/30"
+          onClick={handleRemoveCategory}
+        >
           <BsDash />
         </button>
       </div>
@@ -359,12 +390,11 @@ const Skill = () => {
       </div>
 
       <button className="self-center p-2" onClick={handleSkillSave}>
-          <CiSaveDown1 className="text-3xl" />
-        </button>
+        <CiSaveDown1 className="text-3xl" />
+      </button>
     </div>
   );
 };
-
 
 const Project = () => {
   const dispatch = useDispatch();
@@ -429,7 +459,7 @@ const Project = () => {
   };
 
   const handleProjectSave = () => {
-    toast("the project is added")
+    toast("the project is added");
     dispatch(setProjectStateAll(projects));
   };
 
@@ -613,11 +643,11 @@ const Courses = () => {
     setCourses(updated);
   };
 
-  const dispatch = useDispatch()
-  const handleCourseSave = ()=>{
-    toast("the courses are added")
-    dispatch(setCourseStateAll(courses))
-  }
+  const dispatch = useDispatch();
+  const handleCourseSave = () => {
+    toast("the courses are added");
+    dispatch(setCourseStateAll(courses));
+  };
 
   return (
     <div className=" mt-5 p-4 text-white border border-white/30 rounded w-full mx-auto">
@@ -639,7 +669,9 @@ const Courses = () => {
       </div>
 
       {courses.length === 0 && (
-        <p className="text-gray-400 italic">No courses added yet. Click + to add a course.</p>
+        <p className="text-gray-400 italic">
+          No courses added yet. Click + to add a course.
+        </p>
       )}
 
       {courses.map((course, i) => (
@@ -671,7 +703,9 @@ const Courses = () => {
               placeholder="Start Date (e.g., Jan 2024)"
               className="flex-1 p-2 rounded border border-white/30 bg-transparent text-white"
               value={course.startDate}
-              onChange={(e) => updateCourseField(i, "startDate", e.target.value)}
+              onChange={(e) =>
+                updateCourseField(i, "startDate", e.target.value)
+              }
             />
             <input
               type="text"
@@ -683,7 +717,9 @@ const Courses = () => {
           </div>
 
           <div>
-            <h3 className="mb-2 text-sm font-semibold text-gray-300">Coursework:</h3>
+            <h3 className="mb-2 text-sm font-semibold text-gray-300">
+              Coursework:
+            </h3>
             <ul className="list-disc pl-6 space-y-1">
               {course.coursework.map((point, j) => (
                 <li key={j} className="flex items-center gap-2">
@@ -722,9 +758,12 @@ const Courses = () => {
           </div>
         </div>
       ))}
-      <button className="self-center p-2 border border-white/30 rounded m-2" onClick={handleCourseSave}>
-          <CiSaveDown1 className="text-3xl" />
-        </button>
+      <button
+        className="self-center p-2 border border-white/30 rounded m-2"
+        onClick={handleCourseSave}
+      >
+        <CiSaveDown1 className="text-3xl" />
+      </button>
     </div>
   );
 };
@@ -757,11 +796,11 @@ const Education = () => {
     setEducationList(updated);
   };
 
-  const dispatch = useDispatch()
-  const handleEducationSave = ()=>{
-    toast("the education is added")
-    dispatch(setEducationStateAll(educationList))
-  }
+  const dispatch = useDispatch();
+  const handleEducationSave = () => {
+    toast("the education is added");
+    dispatch(setEducationStateAll(educationList));
+  };
 
   return (
     <div className="p-4 text-white border border-white/30 rounded w-full m-4 mx-auto">
@@ -782,7 +821,9 @@ const Education = () => {
       </div>
 
       {educationList.length === 0 && (
-        <p className="text-gray-400 italic">No education entries yet. Click + to add one.</p>
+        <p className="text-gray-400 italic">
+          No education entries yet. Click + to add one.
+        </p>
       )}
 
       {educationList.map((edu, i) => (
@@ -832,9 +873,12 @@ const Education = () => {
           />
         </div>
       ))}
-      <button className="self-center p-2 border border-white/30 rounded m-2" onClick={handleEducationSave}>
-          <CiSaveDown1 className="text-3xl" />
-        </button>
+      <button
+        className="self-center p-2 border border-white/30 rounded m-2"
+        onClick={handleEducationSave}
+      >
+        <CiSaveDown1 className="text-3xl" />
+      </button>
     </div>
   );
 };
@@ -857,11 +901,11 @@ const Certifications = () => {
     setCerts(updated);
   };
 
-  const dispatch = useDispatch()
-  const handleCertificationSave = ()=>{
-    toast("the certification is added")
-    dispatch(setCertificationStateAll(certs))
-  }
+  const dispatch = useDispatch();
+  const handleCertificationSave = () => {
+    toast("the certification is added");
+    dispatch(setCertificationStateAll(certs));
+  };
 
   return (
     <div className="p-4 text-white border border-white/30 rounded w-full mx-auto">
@@ -916,12 +960,14 @@ const Certifications = () => {
             onChange={(e) => updateCert(i, "date", e.target.value)}
           />
         </div>
-        
       ))}
 
-        <button className="self-center p-2 border border-white/30 rounded m-2" onClick={handleCertificationSave}>
-          <CiSaveDown1 className="text-3xl" />
-        </button>
+      <button
+        className="self-center p-2 border border-white/30 rounded m-2"
+        onClick={handleCertificationSave}
+      >
+        <CiSaveDown1 className="text-3xl" />
+      </button>
     </div>
   );
 };
@@ -946,11 +992,11 @@ const OtherInformation = () => {
     setOtherInfo(updated);
   };
 
-  const dispatch = useDispatch()
-  const handleOtherInformationSave = ()=>{
-    toast.success("the information is  added")
-    dispatch(setOtherCertificationStateAll(otherInfo))
-  }
+  const dispatch = useDispatch();
+  const handleOtherInformationSave = () => {
+    toast.success("the information is  added");
+    dispatch(setOtherCertificationStateAll(otherInfo));
+  };
 
   return (
     <div className="p-4 text-white border border-white/30 rounded w-full mt-5 mx-auto">
@@ -998,38 +1044,57 @@ const OtherInformation = () => {
           </li>
         ))}
       </ul>
-      <button className="self-center p-2 border border-white/30 rounded m-2" onClick={handleOtherInformationSave}>
-          <CiSaveDown1 className="text-3xl" />
-        </button>
+      <button
+        className="self-center p-2 border border-white/30 rounded m-2"
+        onClick={handleOtherInformationSave}
+      >
+        <CiSaveDown1 className="text-3xl" />
+      </button>
     </div>
   );
 };
 
-const Social = ()=>{
-  const dispatch = useDispatch()
-  const [social,setSocial] = useState({
-    linkedin:'',
-    github:'',
-    leetcode:'',
-    portfolio:''
-  })
-  
-  const handleSocialLink = ()=>{
-      // console.log("Clicked")
+const Social = () => {
+  const dispatch = useDispatch();
+  const [social, setSocial] = useState({
+    linkedin: "",
+    github: "",
+    leetcode: "",
+    portfolio: "",
+  });
 
-    dispatch(setSocialStateAll(social))
-    toast("socail links are added")
-  }
+  const handleSocialLink = () => {
+    // console.log("Clicked")
 
-  return <div className="w-full flex flex-col gap-2" >
-    {
-      Object.keys(social).map((v,i)=>{
+    dispatch(setSocialStateAll(social));
+    toast("socail links are added");
+  };
+
+  return (
+    <div className="w-full flex flex-col gap-2">
+      {Object.keys(social).map((v, i) => {
         // console.log(v)
-          return <input value={social[v]} onChange={(e)=>{setSocial({...social,[v]:e.target.value})}} className="border border-white/30 w-full p-2 placeholder:text-white/60 placeholder:capitalize" key={i} type="text" placeholder={v} />
-      })
-    }
-    <button className="self-center p-2 border border-white/30 rounded m-2" onClick={()=>handleSocialLink()}>
-          <CiSaveDown1 className="text-3xl" />
-        </button>
-  </div>
-}
+        return (
+          <input
+            value={social[v]}
+            onChange={(e) => {
+              setSocial({ ...social, [v]: e.target.value });
+            }}
+            className="border border-white/30 w-full p-2 placeholder:text-white/60 placeholder:capitalize"
+            key={i}
+            type="text"
+            placeholder={v}
+          />
+        );
+      })}
+      <button
+        className="self-center p-2 border border-white/30 rounded m-2"
+        onClick={() => handleSocialLink()}
+      >
+        <CiSaveDown1 className="text-3xl" />
+      </button>
+    </div>
+  );
+};
+
+export default Home;
