@@ -155,7 +155,7 @@ function Resume({ isLink, isPrint, isHardCopy }) {
             <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">
               SKILLS
             </h2>
-            <ul className="list-disc list-inside">
+            <ul className="list-disc list-outside pl-5">
               {skill.map((s, i) => (
                 <li key={i}>
                   <strong>{s.name}:</strong> {s.skills.join(", ")}
@@ -178,7 +178,7 @@ function Resume({ isLink, isPrint, isHardCopy }) {
                 </h3>
                 <ul className="list-disc list-outside pl-5">
                   {proj.points?.map((pt, i) => (
-                    <li key={i}>{pt}</li>
+                    <li className="text-justify" key={i}>{pt}</li>
                   ))}
                 </ul>
                 {proj.links && (
@@ -227,10 +227,13 @@ function Resume({ isLink, isPrint, isHardCopy }) {
               (c, i) =>
                 c.coursework?.length > 0 && (
                   <div key={i} className="mb-2">
-                    <p>
+                    {
+                      c.startDate && c.endDate &&
+                      <p>
                       <strong>{c.name}</strong> — {c.startDate} – {c.endDate}
                     </p>
-                    <ul className="list-disc list-outside pl-6">
+                    }
+                    <ul className="list-disc list-outside pl-5">
                       {c.coursework.map((cw, j) => (
                         <li className="text-justify" key={j}>
                           {cw}
