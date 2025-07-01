@@ -302,38 +302,55 @@ const Skill = () => {
 
   // Update category name
   const handleNameChange = (index, value) => {
-    const updated = [...skills];
-    updated[index].name = value;
+    const updated = skills.map((category, i) =>
+      i === index ? { ...category, name: value } : category
+    );
     setSkills(updated);
   };
 
   // Update a skill point
   const handleSkillChange = (catIndex, skillIndex, value) => {
-    const updated = [...skills];
-    updated[catIndex].skills[skillIndex] = value;
+    const updated = skills.map((category, i) => {
+      if (i === catIndex) {
+        const updatedSkills = [...category.skills];
+        updatedSkills[skillIndex] = value;
+        return { ...category, skills: updatedSkills };
+      }
+      return category;
+    });
     setSkills(updated);
   };
 
   // Add a skill point
   const handleAddSkillPoint = (catIndex) => {
-    const updated = [...skills];
-    updated[catIndex].skills.push("");
+    const updated = skills.map((category, i) => {
+      if (i === catIndex) {
+        return { ...category, skills: [...category.skills, ""] };
+      }
+      return category;
+    });
     setSkills(updated);
   };
 
   // Remove a skill point
   const handleRemoveSkillPoint = (catIndex, skillIndex) => {
-    const updated = [...skills];
-    if (updated[catIndex].skills.length > 1) {
-      updated[catIndex].skills.splice(skillIndex, 1);
-      setSkills(updated);
-    }
+    setSkills((prevSkills) => {
+      const updated = prevSkills.map((category, i) => ({
+        ...category,
+        skills: [...category.skills],
+      }));
+
+      if (updated[catIndex].skills.length > 1) {
+        updated[catIndex].skills.splice(skillIndex, 1);
+      }
+
+      return updated;
+    });
   };
 
-  // console.log(skills)
-
+  // Save to Redux
   const handleSkillSave = () => {
-    toast("the skill is added");
+    toast("The skills have been saved!");
     dispatch(setSkillStateAll(skills));
   };
 
@@ -377,7 +394,8 @@ const Skill = () => {
                 />
                 <button
                   onClick={() => handleRemoveSkillPoint(i, j)}
-                  className="border px-2 rounded"
+                  disabled={category.skills.length === 1}
+                  className="border px-2 rounded disabled:opacity-50"
                 >
                   <BsDash />
                 </button>
