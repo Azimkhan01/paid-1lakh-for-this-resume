@@ -9,6 +9,7 @@ import {
   setCourseStateAll,
   setEducationStateAll,
   setHeaderOne,
+  setInitial,
   setOtherCertificationStateAll,
   setProjectStateAll,
   setSkillStateAll,
@@ -18,21 +19,46 @@ import {
 } from "../redux/Form/FormSlice";
 import Resume from "./Resume";
 import { toast } from "react-toastify";
+import { BiCross } from "react-icons/bi";
+import { RxCross2 } from "react-icons/rx";
 
 function Home() {
-  useEffect(()=>{
-    if(! (localStorage.getItem('addvertise') == "done"))
-    toast("Developer : Azimuddeen khan",{
-      onClose:()=>{
-        toast("Inspect for console to see developer details.",{
-          onClose:()=>{localStorage.setItem("addvertise","done")}
-        })
-      }
-    })
-  },[])
-  const headerOneState = useSelector((state) => state.FormSlice);
-  // console.log(headerOneState)
+  useEffect(() => {
+    if (!(localStorage.getItem("addvertise") == "done"))
+      toast("Developer : Azimuddeen khan", {
+        onClose: () => {
+          toast("Inspect for console to see developer details.", {
+            onClose: () => {
+              localStorage.setItem("addvertise", "done");
+            },
+          });
+        },
+      });
+  }, []);
   const dispatch = useDispatch();
+  const headerOneState = useSelector((state) => state.FormSlice);
+
+
+  const [isHydrated, setIsHydrated] = useState(false);
+
+// ⬇️ On mount, load localStorage and dispatch to Redux
+useEffect(() => {
+  const savedForm = localStorage.getItem('form');
+  if (savedForm) {
+    dispatch(setInitial(JSON.parse(savedForm)));
+  }
+  setIsHydrated(true); // ✅ mark as hydrated after setting
+}, [dispatch]);
+
+// ⬇️ Only save to localStorage if hydrated
+useEffect(() => {
+  if (isHydrated) {
+    console.log(isHydrated)
+    localStorage.setItem('form', JSON.stringify(headerOneState));
+  }
+}, [headerOneState, isHydrated]);
+
+
 
   const [headerOne, setHeaderOneLocal] = useState({
     ...headerOneState.headerOne,
@@ -90,6 +116,7 @@ function Home() {
   };
   return (
     <div className="min-h-screen w-full bg-black/90 p-4 text-white">
+      {/* <Issue/> */}
       <Link
         className="absolute border border-white/30 p-2 rounded bg-black/70"
         to={"/resume"}

@@ -58,6 +58,9 @@ const FormSlice = createSlice({
     setSocialStateAll:(s,a)=>{
       // console.log(a.payload)
       return {...s,social:a.payload}
+    },
+    setInitial:(s,a)=>{
+      return {...a.payload}
     }
   },
 });
@@ -73,6 +76,7 @@ export const {
   setEducationStateAll,
   setCertificationStateAll,
   setOtherCertificationStateAll,
-  setSocialStateAll
+  setSocialStateAll,
+  setInitial
 } = FormSlice.actions;
 export default FormSlice.reducer;
