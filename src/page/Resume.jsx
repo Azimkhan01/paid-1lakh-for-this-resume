@@ -176,7 +176,7 @@ function Resume({ isLink, isPrint, isHardCopy }) {
                 <h3 className="font-semibold">
                   {proj.title} | {proj.tech}
                 </h3>
-                <ul className="list-disc list-outside">
+                <ul className="list-disc list-outside pl-5">
                   {proj.points?.map((pt, i) => (
                     <li key={i}>{pt}</li>
                   ))}

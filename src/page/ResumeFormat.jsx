@@ -10,7 +10,7 @@ function ResumeFormat() {
       >
         <FaRegEdit />
       </Link>
-      <div className="max-w-4xl mx-auto p-6 text-gray-900 font-sans space-y-6">
+      <div className="border border-black/30 mt-10 rounded max-w-4xl mx-auto p-6 text-gray-900 font-sans space-y-6">
         <header className="text-center space-y-1">
           <h1 className="text-3xl font-bold">YOUR NAME</h1>
           <p>
