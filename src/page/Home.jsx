@@ -1015,8 +1015,10 @@ const Social = ()=>{
   })
   
   const handleSocialLink = ()=>{
-      console.log("Clicked")
+      // console.log("Clicked")
+
     dispatch(setSocialStateAll(social))
+    toast("socail links are added")
   }
 
   return <div className="w-full flex flex-col gap-2" >
