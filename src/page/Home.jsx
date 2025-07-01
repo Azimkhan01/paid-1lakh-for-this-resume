@@ -21,10 +21,15 @@ import { toast } from "react-toastify";
 
 function Home() {
   useEffect(()=>{
-    toast("Developer : Azimuddeen khan").then(()=>{
-      toast("inspect for console to see developer details.")
+    if(! (localStorage.getItem('addvertise') == "done"))
+    toast("Developer : Azimuddeen khan",{
+      onClose:()=>{
+        toast("Inspect for console to see developer details.",{
+          onClose:()=>{localStorage.setItem("addvertise","done")}
+        })
+      }
     })
-  })
+  },[])
   const headerOneState = useSelector((state) => state.FormSlice);
   // console.log(headerOneState)
   const dispatch = useDispatch();
