@@ -23,14 +23,13 @@ import { toast } from "react-toastify";
 function Home() {
   const dispatch = useDispatch();
   const headerOneState = useSelector((state) => state.FormSlice);
-  
+
   const [isHydrated, setIsHydrated] = useState(false);
-  
-  
+
   const [headerOne, setHeaderOneLocal] = useState({
     ...headerOneState.headerOne,
   });
-  
+
   const [summary, setSummary] = useState({ summary: headerOneState.summary });
   const [workExp, setWorkExp] = useState([
     {
@@ -42,7 +41,7 @@ function Home() {
     },
   ]);
 
-   const [social, setSocial] = useState({
+  const [social, setSocial] = useState({
     linkedin: "",
     github: "",
     leetcode: "",
@@ -84,30 +83,29 @@ function Home() {
         },
       });
   }, []);
-    // console.log(headerOne)
-    // console.log(headerOneState)
+  // console.log(headerOne)
+  // console.log(headerOneState)
   // ⬇️ On mount, load localStorage and dispatch to Redux
   useEffect(() => {
-  const savedForm = localStorage.getItem("form");
-  if (savedForm) {
-    const parsed = JSON.parse(savedForm);
-    dispatch(setInitial(parsed));
+    const savedForm = localStorage.getItem("form");
+    if (savedForm) {
+      const parsed = JSON.parse(savedForm);
+      dispatch(setInitial(parsed));
 
-    setHeaderOneLocal({ ...parsed.headerOne });
-    setSocial({...parsed.social});
-    setSummary({ summary: parsed.summary });
-    setWorkExp([...parsed.workExperience]);
-    setSkills([...parsed.skill])
-    setProjects([...parsed.project])
-    setCourses([...parsed.course])
-    setEducationList([...parsed.education])
-    setCerts([...parsed.certification])
-    setOtherInfo([...parsed.otherInfomation])
-  }
+      setHeaderOneLocal({ ...parsed.headerOne });
+      setSocial({ ...parsed.social });
+      setSummary({ summary: parsed.summary });
+      setWorkExp([...parsed.workExperience]);
+      setSkills([...parsed.skill]);
+      setProjects([...parsed.project]);
+      setCourses([...parsed.course]);
+      setEducationList([...parsed.education]);
+      setCerts([...parsed.certification]);
+      setOtherInfo([...parsed.otherInfomation]);
+    }
 
-  setIsHydrated(true);
-}, [dispatch]);
-
+    setIsHydrated(true);
+  }, [dispatch]);
 
   // ⬇️ Only save to localStorage if hydrated
   useEffect(() => {
@@ -224,22 +222,30 @@ function Home() {
           <button
             className="p-2 rounded border border-white/30"
             onClick={addWorkExp}
+            type="button"
           >
             <IoAddSharp />
-          </button>
-          <button
-            className="p-2 rounded border border-white/30"
-            onClick={removeWorkExp}
-          >
-            <BsDash />
           </button>
         </div>
 
         {workExp.map((item, i) => (
           <div
             key={i}
-            className="flex flex-col gap-2 border p-3 border-white/30 rounded"
+            className="flex flex-col gap-2 border p-3 border-white/30 rounded relative"
           >
+            {/* ❌ Remove this experience block */}
+            <button
+              type="button"
+              className="absolute top-2 right-2 p-1 text-red-500 border bg-black/90 border-white/20 rounded"
+              onClick={() => {
+                const updated = [...workExp];
+                updated.splice(i, 1);
+                setWorkExp(updated);
+              }}
+            >
+              <BsDash />
+            </button>
+
             <input
               type="text"
               placeholder="Company Name"
@@ -304,6 +310,7 @@ function Home() {
                     }}
                   />
                   <button
+                    type="button"
                     onClick={() => {
                       const updated = [...workExp];
                       updated[i].points.splice(pi, 1);
@@ -316,6 +323,7 @@ function Home() {
                 </div>
               ))}
               <button
+                type="button"
                 onClick={() => {
                   const updated = [...workExp];
                   updated[i].points.push("");
@@ -328,10 +336,16 @@ function Home() {
             </div>
           </div>
         ))}
-        <button className="self-center p-2" onClick={handleWorkExperienceSave}>
+
+        <button
+          className="self-center p-2"
+          onClick={handleWorkExperienceSave}
+          type="button"
+        >
           <CiSaveDown1 className="text-3xl" />
         </button>
       </div>
+
       {/* skill component */}
       <Skill skills={skills} setSkills={setSkills} />
       {/* Projects component */}
@@ -339,7 +353,10 @@ function Home() {
       {/* courses */}
       <Courses courses={courses} setCourses={setCourses} />
       {/* education */}
-      <Education educationList={educationList} setEducationList={setEducationList} />
+      <Education
+        educationList={educationList}
+        setEducationList={setEducationList}
+      />
       {/* certification */}
       <Certifications certs={certs} setCerts={setCerts} />
       {/* other information */}
@@ -354,20 +371,19 @@ function Home() {
   );
 }
 
-const Skill = ({skills,setSkills}) => {
+const Skill = ({ skills, setSkills }) => {
   const dispatch = useDispatch();
 
-  // Add new skill category
   const handleAddCategory = () => {
     setSkills([...skills, { name: "", skills: [""] }]);
   };
 
-  // Remove last skill category
-  const handleRemoveCategory = () => {
-    if (skills.length > 1) setSkills(skills.slice(0, -1));
+  const handleRemoveCategory = (index) => {
+    const updated = [...skills];
+    updated.splice(index, 1);
+    setSkills(updated);
   };
 
-  // Update category name
   const handleNameChange = (index, value) => {
     const updated = skills.map((category, i) =>
       i === index ? { ...category, name: value } : category
@@ -375,7 +391,6 @@ const Skill = ({skills,setSkills}) => {
     setSkills(updated);
   };
 
-  // Update a skill point
   const handleSkillChange = (catIndex, skillIndex, value) => {
     const updated = skills.map((category, i) => {
       if (i === catIndex) {
@@ -388,7 +403,6 @@ const Skill = ({skills,setSkills}) => {
     setSkills(updated);
   };
 
-  // Add a skill point
   const handleAddSkillPoint = (catIndex) => {
     const updated = skills.map((category, i) => {
       if (i === catIndex) {
@@ -399,23 +413,19 @@ const Skill = ({skills,setSkills}) => {
     setSkills(updated);
   };
 
-  // Remove a skill point
   const handleRemoveSkillPoint = (catIndex, skillIndex) => {
     setSkills((prevSkills) => {
       const updated = prevSkills.map((category, i) => ({
         ...category,
         skills: [...category.skills],
       }));
-
       if (updated[catIndex].skills.length > 1) {
         updated[catIndex].skills.splice(skillIndex, 1);
       }
-
       return updated;
     });
   };
 
-  // Save to Redux
   const handleSkillSave = () => {
     toast("The skills have been saved!");
     dispatch(setSkillStateAll(skills));
@@ -428,20 +438,24 @@ const Skill = ({skills,setSkills}) => {
         <button
           className="p-2 rounded border border-white/30"
           onClick={handleAddCategory}
+          type="button"
         >
           <IoAddSharp />
-        </button>
-        <button
-          className="p-2 rounded border border-white/30"
-          onClick={handleRemoveCategory}
-        >
-          <BsDash />
         </button>
       </div>
 
       <div className="flex flex-col gap-4 p-2 border border-white/30">
         {skills.map((category, i) => (
-          <div key={i} className="border p-3 rounded space-y-2">
+          <div key={i} className="border p-3 rounded space-y-2 relative">
+            {/* ❌ Remove category button on this block */}
+            <button
+              type="button"
+              onClick={() => handleRemoveCategory(i)}
+              className="absolute top-2 right-2 p-1 text-red-400 border bg-black border-white/20 rounded"
+            >
+              <BsDash />
+            </button>
+
             <input
               type="text"
               placeholder="Skill Category (e.g., Frontend)"
@@ -463,6 +477,7 @@ const Skill = ({skills,setSkills}) => {
                   onClick={() => handleRemoveSkillPoint(i, j)}
                   disabled={category.skills.length === 1}
                   className="border px-2 rounded disabled:opacity-50"
+                  type="button"
                 >
                   <BsDash />
                 </button>
@@ -472,6 +487,7 @@ const Skill = ({skills,setSkills}) => {
             <button
               className="text-sm underline text-blue-400"
               onClick={() => handleAddSkillPoint(i)}
+              type="button"
             >
               + Add more points
             </button>
@@ -479,17 +495,15 @@ const Skill = ({skills,setSkills}) => {
         ))}
       </div>
 
-      <button className="self-center p-2" onClick={handleSkillSave}>
+      <button className="self-center p-2" onClick={handleSkillSave} type="button">
         <CiSaveDown1 className="text-3xl" />
       </button>
     </div>
   );
 };
 
-const Project = ({projects,setProjects}) => {
+const Project = ({ projects, setProjects }) => {
   const dispatch = useDispatch();
-
-  
 
   const addProject = () => {
     if (projects.length >= 5) return;
@@ -508,9 +522,11 @@ const Project = ({projects,setProjects}) => {
     ]);
   };
 
-  const removeProject = () => {
+  const removeProjectByIndex = (index) => {
     if (projects.length <= 1) return;
-    setProjects(projects.slice(0, projects.length - 1));
+    const updated = [...projects];
+    updated.splice(index, 1);
+    setProjects(updated);
   };
 
   const updateProject = (i, field, value) => {
@@ -538,7 +554,7 @@ const Project = ({projects,setProjects}) => {
   };
 
   const handleProjectSave = () => {
-    toast("the project is added");
+    toast("The project is added");
     dispatch(setProjectStateAll(projects));
   };
 
@@ -555,25 +571,30 @@ const Project = ({projects,setProjects}) => {
           }`}
           title="Add project"
           aria-label="Add project"
+          type="button"
         >
           <IoAddSharp size={20} />
-        </button>
-
-        <button
-          onClick={removeProject}
-          disabled={projects.length <= 1}
-          className={`text-white border border-white/30 p-2 rounded ${
-            projects.length <= 1 ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          title="Remove project"
-          aria-label="Remove project"
-        >
-          <BsDash size={20} />
         </button>
       </div>
 
       {projects.map((project, i) => (
         <div key={i} className="mb-6 border p-3 rounded relative">
+          {/* Always show the delete button, but disable if only one project */}
+          <button
+            type="button"
+            className={`absolute top-2 right-2 p-1 border rounded ${
+              projects.length <= 1
+                ? "opacity-50 cursor-not-allowed text-red-300 border-white/20"
+                : "text-red-400 bg-black border-white/30 hover:bg-white hover:text-black"
+            }`}
+            onClick={() => removeProjectByIndex(i)}
+            disabled={projects.length <= 1}
+            title="Remove this project"
+            aria-label="Remove this project"
+          >
+            <BsDash />
+          </button>
+
           <input
             type="text"
             placeholder="Project Title"
@@ -602,14 +623,16 @@ const Project = ({projects,setProjects}) => {
               </li>
             ))}
           </ul>
+
           <button
+            type="button"
             className="text-sm mt-1 underline text-blue-400"
             onClick={() => addPoint(i)}
           >
             + Add another point
           </button>
 
-          {/* Links inputs inside each project */}
+          {/* Links Section */}
           <div className="mt-4 space-y-3">
             <div>
               <label
@@ -666,8 +689,7 @@ const Project = ({projects,setProjects}) => {
       ))}
 
       <p className="mt-4 text-sm text-gray-300">
-        Mention at least 3 projects in a similar manner with diverse skill sets
-        (maximum 5)
+        Mention at least 3 projects in a similar manner with diverse skill sets (maximum 5)
       </p>
 
       <button
@@ -675,6 +697,7 @@ const Project = ({projects,setProjects}) => {
         onClick={handleProjectSave}
         title="Save Projects"
         aria-label="Save Projects"
+        type="button"
       >
         <CiSaveDown1 className="text-3xl" />
       </button>
@@ -682,7 +705,9 @@ const Project = ({projects,setProjects}) => {
   );
 };
 
-const Courses = ({courses, setCourses}) => {
+
+const Courses = ({ courses, setCourses }) => {
+  const dispatch = useDispatch();
 
   const addCourse = () => {
     if (courses.length >= 10) return;
@@ -693,6 +718,7 @@ const Courses = ({courses, setCourses}) => {
   };
 
   const removeCourse = (index) => {
+    if (courses.length <= 1) return;
     setCourses(courses.filter((_, i) => i !== index));
   };
 
@@ -721,17 +747,16 @@ const Courses = ({courses, setCourses}) => {
     setCourses(updated);
   };
 
-  const dispatch = useDispatch();
   const handleCourseSave = () => {
-    toast("the courses are added");
+    toast("The courses are added");
     dispatch(setCourseStateAll(courses));
   };
 
   return (
-    <div className=" mt-5 p-4 text-white border border-white/30 rounded w-full mx-auto">
+    <div className="mt-5 p-4 text-white border border-white/30 rounded w-full mx-auto">
       <h2 className="text-xl font-bold mb-4">Courses</h2>
 
-      {/* Show add course button always */}
+      {/* Global Add Button */}
       <div className="flex gap-2 mb-4">
         <button
           onClick={addCourse}
@@ -757,10 +782,15 @@ const Courses = ({courses, setCourses}) => {
           key={i}
           className="mb-6 border border-white/30 p-4 rounded relative bg-black/30"
         >
-          {/* Remove course button */}
+          {/* Delete button always visible but disabled if only one course */}
           <button
             onClick={() => removeCourse(i)}
-            className="absolute top-2 right-2 p-1 bg-black rounded border border-white/30 hover:bg-white hover:text-black"
+            disabled={courses.length <= 1}
+            className={`absolute top-2 right-2 p-1 rounded border text-red-400 ${
+              courses.length <= 1
+                ? "opacity-50 cursor-not-allowed border-white/20"
+                : "hover:bg-white hover:text-black border-white/30"
+            }`}
             title="Remove course"
             aria-label="Remove course"
           >
@@ -781,9 +811,7 @@ const Courses = ({courses, setCourses}) => {
               placeholder="Start Date (e.g., Jan 2024)"
               className="flex-1 p-2 rounded border border-white/30 bg-transparent text-white"
               value={course.startDate}
-              onChange={(e) =>
-                updateCourseField(i, "startDate", e.target.value)
-              }
+              onChange={(e) => updateCourseField(i, "startDate", e.target.value)}
             />
             <input
               type="text"
@@ -795,9 +823,7 @@ const Courses = ({courses, setCourses}) => {
           </div>
 
           <div>
-            <h3 className="mb-2 text-sm font-semibold text-gray-300">
-              Coursework:
-            </h3>
+            <h3 className="mb-2 text-sm font-semibold text-gray-300">Coursework:</h3>
             <ul className="list-disc pl-6 space-y-1">
               {course.coursework.map((point, j) => (
                 <li key={j} className="flex items-center gap-2">
@@ -836,6 +862,7 @@ const Courses = ({courses, setCourses}) => {
           </div>
         </div>
       ))}
+
       <button
         className="self-center p-2 border border-white/30 rounded m-2"
         onClick={handleCourseSave}
@@ -846,7 +873,8 @@ const Courses = ({courses, setCourses}) => {
   );
 };
 
-const Education = ({educationList, setEducationList}) => {
+const Education = ({ educationList, setEducationList }) => {
+  const dispatch = useDispatch();
 
   const addEducation = () => {
     if (educationList.length >= 10) return;
@@ -862,6 +890,7 @@ const Education = ({educationList, setEducationList}) => {
   };
 
   const removeEducation = (index) => {
+    if (educationList.length <= 1) return;
     const updated = [...educationList];
     updated.splice(index, 1);
     setEducationList(updated);
@@ -873,9 +902,8 @@ const Education = ({educationList, setEducationList}) => {
     setEducationList(updated);
   };
 
-  const dispatch = useDispatch();
   const handleEducationSave = () => {
-    toast("the education is added");
+    toast("The education is added");
     dispatch(setEducationStateAll(educationList));
   };
 
@@ -883,7 +911,7 @@ const Education = ({educationList, setEducationList}) => {
     <div className="p-4 text-white border border-white/30 rounded w-full m-4 mx-auto">
       <h2 className="text-xl font-bold mb-4">Education</h2>
 
-      {/* Add button always visible */}
+      {/* Add Button */}
       <div className="flex gap-2 mb-4">
         <button
           onClick={addEducation}
@@ -897,21 +925,28 @@ const Education = ({educationList, setEducationList}) => {
         </button>
       </div>
 
+      {/* No data message */}
       {educationList.length === 0 && (
         <p className="text-gray-400 italic">
           No education entries yet. Click + to add one.
         </p>
       )}
 
+      {/* Education Fields */}
       {educationList.map((edu, i) => (
         <div
           key={i}
           className="mb-6 border border-white/30 p-4 rounded relative bg-black/30"
         >
-          {/* Remove button */}
+          {/* Delete Button (always visible but disabled on 1 item) */}
           <button
             onClick={() => removeEducation(i)}
-            className="absolute top-2 right-2 p-1 rounded border border-white/30 hover:bg-white bg-black hover:text-black"
+            disabled={educationList.length <= 1}
+            className={`absolute top-2 right-2 p-1 rounded border ${
+              educationList.length <= 1
+                ? "opacity-50 cursor-not-allowed text-red-300 border-white/20 bg-black"
+                : "text-red-400 border-white/30 bg-black hover:bg-white hover:text-black"
+            }`}
             title="Remove education"
           >
             <BsDash size={18} />
@@ -950,6 +985,8 @@ const Education = ({educationList, setEducationList}) => {
           />
         </div>
       ))}
+
+      {/* Save Button */}
       <button
         className="self-center p-2 border border-white/30 rounded m-2"
         onClick={handleEducationSave}
@@ -960,7 +997,8 @@ const Education = ({educationList, setEducationList}) => {
   );
 };
 
-const Certifications = ({certs, setCerts}) => {
+const Certifications = ({ certs, setCerts }) => {
+  const dispatch = useDispatch();
 
   const addCert = () => {
     if (certs.length >= 10) return;
@@ -968,6 +1006,7 @@ const Certifications = ({certs, setCerts}) => {
   };
 
   const removeCert = (index) => {
+    if (certs.length <= 1) return;
     setCerts(certs.filter((_, i) => i !== index));
   };
 
@@ -977,9 +1016,8 @@ const Certifications = ({certs, setCerts}) => {
     setCerts(updated);
   };
 
-  const dispatch = useDispatch();
   const handleCertificationSave = () => {
-    toast("the certification is added");
+    toast("The certification is added");
     dispatch(setCertificationStateAll(certs));
   };
 
@@ -987,6 +1025,7 @@ const Certifications = ({certs, setCerts}) => {
     <div className="p-4 text-white border border-white/30 rounded w-full mx-auto">
       <h2 className="text-xl font-bold mb-4">Certifications</h2>
 
+      {/* Add Button */}
       <div className="flex gap-2 mb-4">
         <button
           onClick={addCert}
@@ -1000,21 +1039,28 @@ const Certifications = ({certs, setCerts}) => {
         </button>
       </div>
 
+      {/* Empty message */}
       {certs.length === 0 && (
         <p className="text-gray-400 italic">
           No certifications added yet. Click + to add.
         </p>
       )}
 
+      {/* Certification Entries */}
       {certs.map((cert, i) => (
         <div
           key={i}
           className="mb-6 border border-white/30 p-4 rounded relative bg-black/30"
         >
-          {/* Remove button */}
+          {/* Remove Button (disabled if only 1) */}
           <button
             onClick={() => removeCert(i)}
-            className="absolute top-2 right-2 p-1 rounded border border-white/30 hover:bg-white hover:text-black"
+            disabled={certs.length <= 1}
+            className={`absolute top-2 right-2 p-1 rounded border ${
+              certs.length <= 1
+                ? "opacity-50 cursor-not-allowed text-red-300 border-white/20 bg-black"
+                : "text-red-400 border-white/30 bg-black hover:bg-white hover:text-black"
+            }`}
             title="Remove certification"
           >
             <BsDash size={18} />
@@ -1038,6 +1084,7 @@ const Certifications = ({certs, setCerts}) => {
         </div>
       ))}
 
+      {/* Save Button */}
       <button
         className="self-center p-2 border border-white/30 rounded m-2"
         onClick={handleCertificationSave}
@@ -1048,28 +1095,27 @@ const Certifications = ({certs, setCerts}) => {
   );
 };
 
-const OtherInformation = ({otherInfo, setOtherInfo}) => {
+const OtherInformation = ({ otherInfo, setOtherInfo }) => {
+  const dispatch = useDispatch();
 
-  // Add a new blank point
   const addPoint = () => {
+    if (otherInfo.length >= 20) return;
     setOtherInfo([...otherInfo, ""]);
   };
 
-  // Remove a point
   const removePoint = (index) => {
+    if (otherInfo.length <= 1) return;
     setOtherInfo(otherInfo.filter((_, i) => i !== index));
   };
 
-  // Update a point
   const updatePoint = (index, value) => {
     const updated = [...otherInfo];
     updated[index] = value;
     setOtherInfo(updated);
   };
 
-  const dispatch = useDispatch();
   const handleOtherInformationSave = () => {
-    toast.success("the information is  added");
+    toast.success("The information is added");
     dispatch(setOtherCertificationStateAll(otherInfo));
   };
 
@@ -1080,6 +1126,7 @@ const OtherInformation = ({otherInfo, setOtherInfo}) => {
         Awards & Achievements / Volunteering Experience — Add if any
       </p>
 
+      {/* Add Button */}
       <div className="flex gap-2 mb-4">
         <button
           onClick={addPoint}
@@ -1093,12 +1140,14 @@ const OtherInformation = ({otherInfo, setOtherInfo}) => {
         </button>
       </div>
 
+      {/* Empty State */}
       {otherInfo.length === 0 && (
         <p className="text-gray-400 italic">
           No other information added yet. Click + to add a point.
         </p>
       )}
 
+      {/* Points List */}
       <ul className="list-disc pl-6 space-y-2">
         {otherInfo.map((info, index) => (
           <li key={index} className="flex items-center gap-2">
@@ -1111,7 +1160,12 @@ const OtherInformation = ({otherInfo, setOtherInfo}) => {
             />
             <button
               onClick={() => removePoint(index)}
-              className="p-1 rounded border border-white/30 text-red-400 hover:bg-red-500 hover:text-white"
+              disabled={otherInfo.length <= 1}
+              className={`p-1 rounded border ${
+                otherInfo.length <= 1
+                  ? "opacity-50 cursor-not-allowed text-red-300 border-white/20 bg-black"
+                  : "text-red-400 border-white/30 bg-black hover:bg-red-500 hover:text-white"
+              }`}
               title="Remove point"
             >
               <BsDash size={16} />
@@ -1119,6 +1173,8 @@ const OtherInformation = ({otherInfo, setOtherInfo}) => {
           </li>
         ))}
       </ul>
+
+      {/* Save Button */}
       <button
         className="self-center p-2 border border-white/30 rounded m-2"
         onClick={handleOtherInformationSave}
@@ -1129,36 +1185,32 @@ const OtherInformation = ({otherInfo, setOtherInfo}) => {
   );
 };
 
-const Social = ({social, setSocial}) => {
+const Social = ({ social, setSocial }) => {
   const dispatch = useDispatch();
 
   const handleSocialLink = () => {
-    // console.log("Clicked")
-
     dispatch(setSocialStateAll(social));
-    toast("socail links are added");
+    toast.success("Social links are added");
   };
 
   return (
-    <div className="w-full flex flex-col gap-2">
-      {Object.keys(social).map((v, i) => {
-        // console.log(v)
-        return (
-          <input
-            value={social[v]}
-            onChange={(e) => {
-              setSocial({ ...social, [v]: e.target.value });
-            }}
-            className="border border-white/30 w-full p-2 placeholder:text-white/60 placeholder:capitalize"
-            key={i}
-            type="text"
-            placeholder={v}
-          />
-        );
-      })}
+    <div className="w-full flex flex-col gap-3">
+      {Object.keys(social).map((key, i) => (
+        <input
+          key={i}
+          type="text"
+          placeholder={key}
+          value={social[key]}
+          onChange={(e) => setSocial({ ...social, [key]: e.target.value })}
+          className="border border-white/30 w-full p-2 rounded bg-transparent text-white placeholder:text-white/60 placeholder:capitalize focus:outline-none focus:ring-1 focus:ring-blue-500"
+        />
+      ))}
       <button
-        className="self-center p-2 border border-white/30 rounded m-2"
-        onClick={() => handleSocialLink()}
+        onClick={handleSocialLink}
+        className="self-center p-2 border border-white/30 rounded hover:bg-white hover:text-black transition-colors"
+        title="Save Social Links"
+        aria-label="Save Social Links"
+        type="button"
       >
         <CiSaveDown1 className="text-3xl" />
       </button>
