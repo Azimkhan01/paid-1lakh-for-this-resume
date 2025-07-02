@@ -19,10 +19,59 @@ import {
 } from "../redux/Form/FormSlice";
 import Resume from "./Resume";
 import { toast } from "react-toastify";
-import { BiCross } from "react-icons/bi";
-import { RxCross2 } from "react-icons/rx";
 
 function Home() {
+  const dispatch = useDispatch();
+  const headerOneState = useSelector((state) => state.FormSlice);
+  
+  const [isHydrated, setIsHydrated] = useState(false);
+  
+  
+  const [headerOne, setHeaderOneLocal] = useState({
+    ...headerOneState.headerOne,
+  });
+  
+  const [summary, setSummary] = useState({ summary: headerOneState.summary });
+  const [workExp, setWorkExp] = useState([
+    {
+      company_name: "",
+      role: "",
+      start: "",
+      end: "",
+      points: [],
+    },
+  ]);
+
+   const [social, setSocial] = useState({
+    linkedin: "",
+    github: "",
+    leetcode: "",
+    portfolio: "",
+  });
+
+  const [skills, setSkills] = useState([{ name: "", skills: [""] }]);
+
+  const [projects, setProjects] = useState([
+    {
+      title: "",
+      tech: "",
+      points: [""],
+      links: {
+        linkedin: "",
+        github: "",
+        portfolio: "",
+      },
+    },
+  ]);
+
+  const [courses, setCourses] = useState([]); // start empty
+
+  const [educationList, setEducationList] = useState([]);
+
+  const [certs, setCerts] = useState([]);
+
+  const [otherInfo, setOtherInfo] = useState([]);
+
   useEffect(() => {
     if (!(localStorage.getItem("addvertise") == "done"))
       toast("Developer : Azimuddeen khan", {
@@ -35,46 +84,38 @@ function Home() {
         },
       });
   }, []);
-  const dispatch = useDispatch();
-  const headerOneState = useSelector((state) => state.FormSlice);
-
-
-  const [isHydrated, setIsHydrated] = useState(false);
-
-// ⬇️ On mount, load localStorage and dispatch to Redux
-useEffect(() => {
-  const savedForm = localStorage.getItem('form');
+    // console.log(headerOne)
+    // console.log(headerOneState)
+  // ⬇️ On mount, load localStorage and dispatch to Redux
+  useEffect(() => {
+  const savedForm = localStorage.getItem("form");
   if (savedForm) {
-    dispatch(setInitial(JSON.parse(savedForm)));
+    const parsed = JSON.parse(savedForm);
+    dispatch(setInitial(parsed));
+
+    setHeaderOneLocal({ ...parsed.headerOne });
+    setSocial({...parsed.social});
+    setSummary({ summary: parsed.summary });
+    setWorkExp([...parsed.workExperience]);
+    setSkills([...parsed.skill])
+    setProjects([...parsed.project])
+    setCourses([...parsed.course])
+    setEducationList([...parsed.education])
+    setCerts([...parsed.certification])
+    setOtherInfo([...parsed.otherInfomation])
   }
-  setIsHydrated(true); // ✅ mark as hydrated after setting
+
+  setIsHydrated(true);
 }, [dispatch]);
 
-// ⬇️ Only save to localStorage if hydrated
-useEffect(() => {
-  if (isHydrated) {
-    console.log(isHydrated)
-    localStorage.setItem('form', JSON.stringify(headerOneState));
-  }
-}, [headerOneState, isHydrated]);
 
-
-
-  const [headerOne, setHeaderOneLocal] = useState({
-    ...headerOneState.headerOne,
-  });
-
-  const [summary, setSummary] = useState({ summary: headerOneState.summary });
-
-  const [workExp, setWorkExp] = useState([
-    {
-      company_name: "",
-      role: "",
-      start: "",
-      end: "",
-      points: [],
-    },
-  ]);
+  // ⬇️ Only save to localStorage if hydrated
+  useEffect(() => {
+    if (isHydrated) {
+      // console.log(isHydrated);
+      localStorage.setItem("form", JSON.stringify(headerOneState));
+    }
+  }, [headerOneState, isHydrated]);
 
   const c = ["name", "email", "address", "number"];
 
@@ -160,7 +201,7 @@ useEffect(() => {
           <CiSaveDown1 className="text-3xl" />
         </button>
       </div>
-      <Social />
+      <Social social={social} setSocial={setSocial} />
       {/* Summary Section */}
       <div className="flex flex-col gap-3 mt-6">
         <h1 className="text-2xl font-semibold">Summary</h1>
@@ -292,17 +333,17 @@ useEffect(() => {
         </button>
       </div>
       {/* skill component */}
-      <Skill />
+      <Skill skills={skills} setSkills={setSkills} />
       {/* Projects component */}
-      <Project />
+      <Project projects={projects} setProjects={setProjects} />
       {/* courses */}
-      <Courses />
+      <Courses courses={courses} setCourses={setCourses} />
       {/* education */}
-      <Education />
+      <Education educationList={educationList} setEducationList={setEducationList} />
       {/* certification */}
-      <Certifications />
+      <Certifications certs={certs} setCerts={setCerts} />
       {/* other information */}
-      <OtherInformation />
+      <OtherInformation otherInfo={otherInfo} setOtherInfo={setOtherInfo} />
       <div
         id="preview-page"
         className={`w-full mt-10 border border-white/30 p-2 rounded`}
@@ -313,9 +354,8 @@ useEffect(() => {
   );
 }
 
-const Skill = () => {
+const Skill = ({skills,setSkills}) => {
   const dispatch = useDispatch();
-  const [skills, setSkills] = useState([{ name: "", skills: [""] }]);
 
   // Add new skill category
   const handleAddCategory = () => {
@@ -446,21 +486,10 @@ const Skill = () => {
   );
 };
 
-const Project = () => {
+const Project = ({projects,setProjects}) => {
   const dispatch = useDispatch();
 
-  const [projects, setProjects] = useState([
-    {
-      title: "",
-      tech: "",
-      points: [""],
-      links: {
-        linkedin: "",
-        github: "",
-        portfolio: "",
-      },
-    },
-  ]);
+  
 
   const addProject = () => {
     if (projects.length >= 5) return;
@@ -653,8 +682,7 @@ const Project = () => {
   );
 };
 
-const Courses = () => {
-  const [courses, setCourses] = useState([]); // start empty
+const Courses = ({courses, setCourses}) => {
 
   const addCourse = () => {
     if (courses.length >= 10) return;
@@ -818,8 +846,7 @@ const Courses = () => {
   );
 };
 
-const Education = () => {
-  const [educationList, setEducationList] = useState([]);
+const Education = ({educationList, setEducationList}) => {
 
   const addEducation = () => {
     if (educationList.length >= 10) return;
@@ -933,8 +960,7 @@ const Education = () => {
   );
 };
 
-const Certifications = () => {
-  const [certs, setCerts] = useState([]);
+const Certifications = ({certs, setCerts}) => {
 
   const addCert = () => {
     if (certs.length >= 10) return;
@@ -1022,8 +1048,7 @@ const Certifications = () => {
   );
 };
 
-const OtherInformation = () => {
-  const [otherInfo, setOtherInfo] = useState([]);
+const OtherInformation = ({otherInfo, setOtherInfo}) => {
 
   // Add a new blank point
   const addPoint = () => {
@@ -1104,14 +1129,8 @@ const OtherInformation = () => {
   );
 };
 
-const Social = () => {
+const Social = ({social, setSocial}) => {
   const dispatch = useDispatch();
-  const [social, setSocial] = useState({
-    linkedin: "",
-    github: "",
-    leetcode: "",
-    portfolio: "",
-  });
 
   const handleSocialLink = () => {
     // console.log("Clicked")
