@@ -513,11 +513,7 @@ const Project = ({ projects, setProjects }) => {
         title: "",
         tech: "",
         points: [""],
-        links: {
-          linkedin: "",
-          github: "",
-          portfolio: "",
-        },
+        links: { linkedin: "", github: "", portfolio: "" },
       },
     ]);
   };
@@ -554,7 +550,7 @@ const Project = ({ projects, setProjects }) => {
   };
 
   const handleProjectSave = () => {
-    toast("The project is added");
+    toast("Projects saved successfully!");
     dispatch(setProjectStateAll(projects));
   };
 
@@ -562,148 +558,144 @@ const Project = ({ projects, setProjects }) => {
     <div className="p-4 text-white border border-white/30 rounded">
       <h2 className="text-xl font-bold mb-4">PROJECTS</h2>
 
-      <div className="flex gap-2 p-4">
+      <div className="flex justify-between items-center mb-4">
+        <p className="text-sm text-gray-300">
+          Mention at least 3 projects (max 5) using diverse skills
+        </p>
         <button
           onClick={addProject}
           disabled={projects.length >= 5}
-          className={`text-white border border-white/30 p-2 rounded ${
-            projects.length >= 5 ? "opacity-50 cursor-not-allowed" : ""
+          className={`p-2 border rounded ${
+            projects.length >= 5
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-white hover:text-black border-white/30"
           }`}
-          title="Add project"
-          aria-label="Add project"
-          type="button"
         >
           <IoAddSharp size={20} />
         </button>
       </div>
 
-      {projects.map((project, i) => (
-        <div key={i} className="mb-6 border p-3 rounded relative">
-          {/* Always show the delete button, but disable if only one project */}
-          <button
-            type="button"
-            className={`absolute top-2 right-2 p-1 border rounded ${
-              projects.length <= 1
-                ? "opacity-50 cursor-not-allowed text-red-300 border-white/20"
-                : "text-red-400 bg-black border-white/30 hover:bg-white hover:text-black"
-            }`}
-            onClick={() => removeProjectByIndex(i)}
-            disabled={projects.length <= 1}
-            title="Remove this project"
-            aria-label="Remove this project"
-          >
-            <BsDash />
-          </button>
+      <div className="space-y-8">
+        {projects.map((project, i) => (
+          <div key={i} className="relative border p-4 rounded-md space-y-3">
+            {/* Remove button */}
+            <button
+              type="button"
+              className={`absolute top-2 right-2 p-1 border rounded ${
+                projects.length <= 1
+                  ? "opacity-50 cursor-not-allowed text-red-300 border-white/20"
+                  : "text-red-400 bg-black border-white/30 hover:bg-white hover:text-black"
+              }`}
+              onClick={() => removeProjectByIndex(i)}
+              disabled={projects.length <= 1}
+              title="Remove project"
+            >
+              <BsDash />
+            </button>
 
-          <input
-            type="text"
-            placeholder="Project Title"
-            className="w-full p-2 rounded border border-white/30 mb-2"
-            value={project.title}
-            onChange={(e) => updateProject(i, "title", e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Tech Used (e.g. Python, React)"
-            className="w-full p-2 rounded border border-white/30 mb-2"
-            value={project.tech}
-            onChange={(e) => updateProject(i, "tech", e.target.value)}
-          />
+            {/* Title */}
+            <input
+              type="text"
+              placeholder="Project Title"
+              className="w-full p-2 rounded border border-white/30"
+              value={project.title}
+              onChange={(e) => updateProject(i, "title", e.target.value)}
+            />
 
-          <ul className="list-disc pl-6">
-            {project.points.map((pt, j) => (
-              <li key={j} className="mb-1">
+            {/* Tech */}
+            <input
+              type="text"
+              placeholder="Tech Used (e.g. React, Node.js)"
+              className="w-full p-2 rounded border border-white/30"
+              value={project.tech}
+              onChange={(e) => updateProject(i, "tech", e.target.value)}
+            />
+
+            {/* Bullet Points */}
+            <ul className="space-y-2">
+              {project.points.map((pt, j) => (
+                <li key={j}>
+                  <input
+                    type="text"
+                    placeholder={`Point ${j + 1}`}
+                    className="w-full p-2 rounded border border-white/30"
+                    value={pt}
+                    onChange={(e) => updatePoint(i, j, e.target.value)}
+                  />
+                </li>
+              ))}
+            </ul>
+
+            <button
+              type="button"
+              className="text-sm text-blue-400 underline"
+              onClick={() => addPoint(i)}
+            >
+              + Add another point
+            </button>
+
+            {/* Links */}
+            <div className="grid sm:grid-cols-2 gap-4 mt-4">
+              <div>
+                <label htmlFor={`linkedin-${i}`} className="block mb-1 text-sm text-gray-300">
+                  LinkedIn URL:
+                </label>
                 <input
-                  type="text"
-                  placeholder="Point"
-                  className="w-full p-1 rounded border border-white/30"
-                  value={pt}
-                  onChange={(e) => updatePoint(i, j, e.target.value)}
+                  id={`linkedin-${i}`}
+                  type="url"
+                  placeholder="https://linkedin.com/in/yourprofile"
+                  className="w-full p-2 rounded border border-white/30 bg-transparent text-white"
+                  value={project.links.linkedin}
+                  onChange={(e) => updateLink(i, "linkedin", e.target.value)}
                 />
-              </li>
-            ))}
-          </ul>
+              </div>
 
-          <button
-            type="button"
-            className="text-sm mt-1 underline text-blue-400"
-            onClick={() => addPoint(i)}
-          >
-            + Add another point
-          </button>
+              <div>
+                <label htmlFor={`github-${i}`} className="block mb-1 text-sm text-gray-300">
+                  GitHub URL:
+                </label>
+                <input
+                  id={`github-${i}`}
+                  type="url"
+                  placeholder="https://github.com/yourusername"
+                  className="w-full p-2 rounded border border-white/30 bg-transparent text-white"
+                  value={project.links.github}
+                  onChange={(e) => updateLink(i, "github", e.target.value)}
+                />
+              </div>
 
-          {/* Links Section */}
-          <div className="mt-4 space-y-3">
-            <div>
-              <label
-                htmlFor={`linkedin-${i}`}
-                className="block mb-1 text-sm text-gray-300"
-              >
-                LinkedIn URL:
-              </label>
-              <input
-                id={`linkedin-${i}`}
-                type="url"
-                placeholder="https://linkedin.com/in/yourprofile"
-                className="w-full p-2 rounded border border-white/30 bg-transparent text-white"
-                value={project.links.linkedin}
-                onChange={(e) => updateLink(i, "linkedin", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor={`github-${i}`}
-                className="block mb-1 text-sm text-gray-300"
-              >
-                GitHub URL:
-              </label>
-              <input
-                id={`github-${i}`}
-                type="url"
-                placeholder="https://github.com/yourusername"
-                className="w-full p-2 rounded border border-white/30 bg-transparent text-white"
-                value={project.links.github}
-                onChange={(e) => updateLink(i, "github", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor={`portfolio-${i}`}
-                className="block mb-1 text-sm text-gray-300"
-              >
-                Portfolio URL:
-              </label>
-              <input
-                id={`portfolio-${i}`}
-                type="url"
-                placeholder="https://yourportfolio.com"
-                className="w-full p-2 rounded border border-white/30 bg-transparent text-white"
-                value={project.links.portfolio}
-                onChange={(e) => updateLink(i, "portfolio", e.target.value)}
-              />
+              <div className="sm:col-span-2">
+                <label htmlFor={`portfolio-${i}`} className="block mb-1 text-sm text-gray-300">
+                  Portfolio URL:
+                </label>
+                <input
+                  id={`portfolio-${i}`}
+                  type="url"
+                  placeholder="https://yourportfolio.com"
+                  className="w-full p-2 rounded border border-white/30 bg-transparent text-white"
+                  value={project.links.portfolio}
+                  onChange={(e) => updateLink(i, "portfolio", e.target.value)}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
-      <p className="mt-4 text-sm text-gray-300">
-        Mention at least 3 projects in a similar manner with diverse skill sets (maximum 5)
-      </p>
-
-      <button
-        className="self-center p-2 mt-4 border border-white/30 rounded"
-        onClick={handleProjectSave}
-        title="Save Projects"
-        aria-label="Save Projects"
-        type="button"
-      >
-        <CiSaveDown1 className="text-3xl" />
-      </button>
+      {/* Save Button */}
+      <div className="flex justify-center mt-6">
+        <button
+          className="flex items-center gap-2 border border-white/30 rounded px-4 py-2 hover:bg-white hover:text-black transition"
+          onClick={handleProjectSave}
+        >
+          <CiSaveDown1 className="text-xl" />
+          <span>Save Projects</span>
+        </button>
+      </div>
     </div>
   );
 };
+
 
 
 const Courses = ({ courses, setCourses }) => {
