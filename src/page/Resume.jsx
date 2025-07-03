@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
@@ -25,7 +25,9 @@ function Resume({ isLink, isPrint, isHardCopy }) {
     };
 
     window.addEventListener("afterprint", afterPrintHandler);
-    alert("when you redirect to print goto advance setting and turn off header and footer ")
+    alert(
+      "when you redirect to print goto advance setting and turn off header and footer "
+    );
     window.print();
   };
 
@@ -42,37 +44,50 @@ function Resume({ isLink, isPrint, isHardCopy }) {
     otherInfomation,
   } = useSelector((state) => state.FormSlice);
 
+
   return (
     <>
       <Link
         id="l"
         to="/"
-        className={`absolute top-15 left-5 border border-black/40 p-2 rounded ${isLink && "hidden"}`}
+        className={`absolute top-15 left-5 border border-black/40 p-2 rounded ${
+          isLink && "hidden"
+        }`}
       >
         <FaRegEdit />
       </Link>
       <button
         id="hc"
-        className={`border text-blue-400 border-blue-400 m-2 hover:bg-blue-400 hover:text-white/90 transition-all ease-in-out duration-200 rounded p-2 ${isHardCopy ? "hidden" : ""}`}
+        className={`border text-blue-400 border-blue-400 m-2 hover:bg-blue-400 hover:text-white/90 transition-all ease-in-out duration-200 rounded p-2 ${
+          isHardCopy ? "hidden" : ""
+        }`}
         onClick={() => setHardCopy(!hardCopy)}
       >
         HardCopy
       </button>
       <button
         id="ip"
-        className={`border text-blue-400 border-blue-400 m-2 hover:bg-blue-400 hover:text-white/90 transition-all ease-in-out duration-200 rounded p-2 ${isPrint ? "hidden" : ""}`}
+        className={`border text-blue-400 border-blue-400 m-2 hover:bg-blue-400 hover:text-white/90 transition-all ease-in-out duration-200 rounded p-2 ${
+          isPrint ? "hidden" : ""
+        }`}
         onClick={handlePrint}
       >
         Print
       </button>
 
-      <div ref={mainId} className="max-w-4xl mx-auto p-12 text-gray-900 font-sans space-y-6 bg-white">
+      <div
+        ref={mainId}
+        className="max-w-4xl mx-auto p-12 text-gray-900 font-sans space-y-6 bg-white"
+      >
         {/* Header */}
         <header className="text-center space-y-1">
           <h1 className="text-3xl font-bold">{headerOne?.name}</h1>
           <p>
             +91 {headerOne?.number} |{" "}
-            <a href={`mailto:${headerOne?.email}`} className="text-blue-600 underline decoration-white">
+            <a
+              href={`mailto:${headerOne?.email}`}
+              className="text-blue-600 underline decoration-white"
+            >
               {headerOne?.email}
             </a>{" "}
             | {headerOne?.address}
@@ -80,13 +95,33 @@ function Resume({ isLink, isPrint, isHardCopy }) {
           {social && !hardCopy && (
             <p>
               {social.linkedin && (
-                <a href={social.linkedin} className="decoration-white text-blue-400" target="_blank">LinkedIn |</a>
+                <a
+                  href={social.linkedin}
+                  className="decoration-white text-blue-400"
+                  target="_blank"
+                >
+                  LinkedIn |
+                </a>
               )}
               {social.github && (
-                <a href={social.github} className="decoration-white text-blue-400" target="_blank"> GitHub</a>
+                <a
+                  href={social.github}
+                  className="decoration-white text-blue-400"
+                  target="_blank"
+                >
+                  {" "}
+                  GitHub
+                </a>
               )}
               {social.portfolio && (
-                <a href={social.portfolio} className="decoration-white text-blue-400" target="_blank"> | Portfolio</a>
+                <a
+                  href={social.portfolio}
+                  className="decoration-white text-blue-400"
+                  target="_blank"
+                >
+                  {" "}
+                  | Portfolio
+                </a>
               )}
             </p>
           )}
@@ -95,7 +130,9 @@ function Resume({ isLink, isPrint, isHardCopy }) {
         {/* Summary */}
         {summary && (
           <section>
-            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">SUMMARY</h2>
+            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">
+              SUMMARY
+            </h2>
             <p>{summary}</p>
           </section>
         )}
@@ -103,7 +140,9 @@ function Resume({ isLink, isPrint, isHardCopy }) {
         {/* Work Experience */}
         {workExperience?.length > 0 && (
           <section>
-            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">WORK EXPERIENCE</h2>
+            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">
+              WORK EXPERIENCE
+            </h2>
             {workExperience.map((job, idx) => (
               <div key={idx} className="mb-4">
                 <h3 className="font-semibold">{job.company_name}</h3>
@@ -123,7 +162,9 @@ function Resume({ isLink, isPrint, isHardCopy }) {
         {/* Skills */}
         {skill?.length > 0 && (
           <section>
-            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">SKILLS</h2>
+            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">
+              SKILLS
+            </h2>
             <ul className="list-disc list-outside pl-5">
               {skill.map((s, i) => (
                 <li key={i}>
@@ -137,25 +178,49 @@ function Resume({ isLink, isPrint, isHardCopy }) {
         {/* Projects */}
         {project?.length > 0 && (
           <section>
-            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">PROJECTS</h2>
+            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">
+              PROJECTS
+            </h2>
             {project.map((proj, idx) => (
               <div key={idx} className="mb-4">
-                <h3 className="font-semibold">{proj.title} | {proj.tech}</h3>
+                <h3 className="font-semibold">
+                  {proj.title} | {proj.tech}
+                </h3>
                 <ul className="list-disc list-outside pl-5">
                   {proj.points?.map((pt, i) => (
-                    <li className="text-justify" key={i}>{pt}</li>
+                    <li className="text-justify" key={i}>
+                      {pt}
+                    </li>
                   ))}
                 </ul>
                 {proj.links && (
                   <div className="text-blue-600 underline space-x-4 mt-1">
                     {proj.links.linkedin && (
-                      <a href={proj.links.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+                      <a
+                        href={proj.links.linkedin}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        LinkedIn
+                      </a>
                     )}
                     {proj.links.github && (
-                      <a href={proj.links.github} target="_blank" rel="noreferrer">GitHub</a>
+                      <a
+                        href={proj.links.github}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        GitHub
+                      </a>
                     )}
                     {proj.links.portfolio && (
-                      <a href={proj.links.portfolio} target="_blank" rel="noreferrer">Portfolio</a>
+                      <a
+                        href={proj.links.portfolio}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Portfolio
+                      </a>
                     )}
                   </div>
                 )}
@@ -167,7 +232,9 @@ function Resume({ isLink, isPrint, isHardCopy }) {
         {/* Courses */}
         {course?.some((c) => c.coursework?.length > 0) && (
           <section>
-            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">COURSES</h2>
+            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">
+              COURSES
+            </h2>
             {course.map(
               (c, i) =>
                 c.coursework?.length > 0 && (
@@ -182,7 +249,9 @@ function Resume({ isLink, isPrint, isHardCopy }) {
                     )}
                     <ul className="list-disc list-outside pl-5">
                       {c.coursework.map((cw, j) => (
-                        <li className="text-justify" key={j}>{cw}</li>
+                        <li className="text-justify" key={j}>
+                          {cw}
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -194,7 +263,9 @@ function Resume({ isLink, isPrint, isHardCopy }) {
         {/* Education */}
         {education?.length > 0 && (
           <section>
-            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">EDUCATION</h2>
+            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">
+              EDUCATION
+            </h2>
             {education.map((e, i) => (
               <div key={i} className="mb-2">
                 <p>
@@ -211,10 +282,15 @@ function Resume({ isLink, isPrint, isHardCopy }) {
         {/* Certifications */}
         {certification?.length > 0 && (
           <section>
-            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">CERTIFICATIONS</h2>
+            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">
+              CERTIFICATIONS
+            </h2>
             <ul className="list-disc list-inside">
               {certification.map((cert, i) => (
-                <li key={i} className="flex justify-between items-center w-full">
+                <li
+                  key={i}
+                  className="flex justify-between items-center w-full"
+                >
                   <span>{cert.name}</span>
                   <span className="text-sm text-gray-600">{cert.date}</span>
                 </li>
@@ -226,7 +302,9 @@ function Resume({ isLink, isPrint, isHardCopy }) {
         {/* Other Information */}
         {otherInfomation?.length > 0 && (
           <section>
-            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">OTHER INFORMATION</h2>
+            <h2 className="text-xl font-bold border-b border-gray-300 pb-1 mb-2">
+              OTHER INFORMATION
+            </h2>
             <ul className="list-disc list-inside">
               {otherInfomation.map((info, i) => (
                 <li key={i}>{info}</li>
